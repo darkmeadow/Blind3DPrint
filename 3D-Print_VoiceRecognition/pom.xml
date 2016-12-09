@@ -26,6 +26,11 @@
     </plugins>
   </build>
   <dependencies>
+  <dependency>
+    <groupId>org.scijava</groupId>
+    <artifactId>native-lib-loader</artifactId>
+    <version>2.1.4</version>
+</dependency>
   	<dependency>
   		<groupId>edu.cmu.sphinx</groupId>
   		<artifactId>sphinx4-core</artifactId>
