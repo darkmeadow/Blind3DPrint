@@ -1,5 +1,7 @@
 package de.thn.print;
 
+import com.sun.jna.WString;
+
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.LiveSpeechRecognizer;
 import edu.cmu.sphinx.api.SpeechResult;
@@ -12,7 +14,6 @@ public class LiveVoiceRecognizerExample {
 		Configuration configuration = new Configuration();
 		DllController dll = new DllController();
 		TTS tts = new TTS(dll);
-		//dll.run("msgbox,64,Test,Sprachaufnahme beginnt!");
 
 		tts.say("Sprachaufnahme beginnt. Sagen Sie öffnen, um eine Datei zum Drucken zu laden");
 //		configuration
@@ -34,37 +35,41 @@ public class LiveVoiceRecognizerExample {
 		SpeechResult result = recognizer.getResult();
 		// Pause recognition process. It can be resumed then with startRecognition(false).
 		
-		
 		while (true){
 			result = recognizer.getResult();
 			String res = result.getHypothesis();
 			System.out.println(res);
 			if (res.equals("ENDE")){
-				dll.run("msgbox,64,Test,Sprachaufnahme erfolgreich beendet!");
+				dll.run(new WString("msgbox,64,Test,Sprachaufnahme erfolgreich beendet!"));
 				recognizer.stopRecognition();
 				System.exit(0);
-				
+			}
+
 			switch (res){
-			case "verbinden":
-				dll.run("winactivate, Repetier-Host /n"
-						+ "controlclick, X39 Y75");
+			case "VERBINDEN":
+//				dll.run(new WString("winactivate, Repetier-Host `n"
+//						+ "controlclick, X39 Y75"));
+				dll.runFunc("connect");
 				break;
-			case "öffnen":
-				dll.run("winactivate, Repetier-Host /n"
-						+ "send, ^o");
+			case "Ã–FFNEN":
+//				dll.run(new WString("winactivate, Repetier-Host `n"
+//						+ "send, ^o"));
+				dll.runFunc("open");
 				break;
-			case "berechnen":
-				dll.run("winactivate, Repetier-Host /n"
-						+ "controlclick, Slice mit CuraEngine");
+			case "BERECHNEN":
+//				dll.run(new WString("winactivate, Repetier-Host `n"
+//						+ "controlclick, Slice mit CuraEngine"));
+				dll.runFunc("slice");
 				break;
-			case "drucken":
-				dll.run("winactivate, Repetier-Host /n"
-						+ "controlclick, Drucken");
+			case "DRUCKEN":
+//				dll.run(new WString("winactivate, Repetier-Host `n"
+//						+ "controlclick, Drucken"));
+				dll.runFunc("print");
 				break;
 			default:
 				break;
 			}
-			}
+			
 		}
 	}
 }
